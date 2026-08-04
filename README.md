@@ -17,7 +17,7 @@ This paper proposes a three-layer control model:
 | Item | Detail |
 |------|--------|
 | Platform | Zenodo |
-| DOI | [10.5281/zenodo.21347905](https://doi.org/10.5281/zenodo.21347905) |
+| DOI | [10.5281/zenodo.21365521](https://doi.org/10.5281/zenodo.21365521) |
 | Indexed | OpenAIRE |
 | Published | July 2026 |
 
@@ -44,17 +44,17 @@ The increasing use of artificial intelligence in the workplace has surpassed the
 
 ## Citation
 
-\```bibtex
+```bibtex
 @misc{sugihara2026,
   author    = {Sugihara, Yuto},
   title     = {Governing Enterprise AI: A Three-Layer 
                Defense-in-Depth Model},
   year      = {2026},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.21347905},
-  url       = {https://doi.org/10.5281/zenodo.21347905}
+  doi       = {10.5281/zenodo.21365521},
+  url       = {https://doi.org/10.5281/zenodo.21365521}
 }
-\```
+```
 
 ## License
 
