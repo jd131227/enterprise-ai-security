@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governing Enterprise AI: A Three-Layer Defense-in-Depth Model</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+
+        .slide {
+            width: 100%;
+            min-height: 100vh;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            page-break-after: always;
+            position: relative;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #4361ee, #7209b7, #f72585);
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .title-slide h1 {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #4361ee, #7209b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.3;
+        }
+
+        .title-slide .subtitle {
+            font-size: 28px;
+            color: #a0a0a0;
+            margin-bottom: 60px;
+        }
+
+        .title-slide .author {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .title-slide .affiliation {
+            font-size: 20px;
+            color: #7209b7;
+        }
+
+        h2 {
+            font-size: 42px;
+            margin-bottom: 40px;
+            color: #4361ee;
+        }
+
+        h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #7209b7;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 24px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 20px;
+            height: 4px;
+            background: linear-gradient(90deg, #4361ee, #7209b7);
+            border-radius: 2px;
+        }
+
+        .highlight {
+            color: #f72585;
+            font-weight: 600;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 30px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card li {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .layer-card {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.2) 0%, rgba(114, 9, 183, 0.2) 100%);
+            border: 2px solid;
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+        }
+
+        .layer-card.layer1 {
+            border-color: #4361ee;
+        }
+
+        .layer-card.layer2 {
+            border-color: #7209b7;
+        }
+
+        .layer-card.layer3 {
+            border-color: #f72585;
+        }
+
+        .layer-card .layer-num {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .layer-card.layer1 .layer-num { color: #4361ee; }
+        .layer-card.layer2 .layer-num { color: #7209b7; }
+        .layer-card.layer3 .layer-num { color: #f72585; }
+
+        .layer-card h3 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .layer-card p {
+            font-size: 18px;
+            color: #a0a0a0;
+            line-height: 1.6;
+        }
+
+        .diagram {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #4361ee, #7209b7);
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .flow-arrow {
+            font-size: 30px;
+            color: #7209b7;
+        }
+
+        .quote {
+            font-size: 28px;
+            font-style: italic;
+            color: #a0a0a0;
+            text-align: center;
+            padding: 40px;
+            border-left: 4px solid #7209b7;
+            margin: 30px 0;
+            background: rgba(114, 9, 183, 0.1);
+            border-radius: 0 16px 16px 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .stat-number {
+            font-size: 64px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #4361ee, #f72585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 20px;
+            color: #a0a0a0;
+            margin-top: 10px;
+        }
+
+        .framework-box {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .framework {
+            flex: 1;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            border-top: 4px solid;
+        }
+
+        .framework.nist {
+            border-color: #4361ee;
+        }
+
+        .framework.oecd {
+            border-color: #7209b7;
+        }
+
+        .framework h3 {
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+
+        .framework li {
+            font-size: 20px;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.2), rgba(247, 37, 133, 0.2));
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .conclusion-box li {
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .contact-info p {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #a0a0a0;
+        }
+
+        .logo-placeholder {
+            font-size: 18px;
+            color: #666;
+            position: absolute;
+            bottom: 30px;
+            left: 60px;
+        }
+
+        @media print {
+            .slide {
+                height: 100vh;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide title-slide">
+    <h1>Governing Enterprise AI:<br>A Three-Layer Defense-in-Depth Model</h1>
+    <p class="subtitle">Transforming AI Policy into Enforceable Technical Controls</p>
+    <p class="author">Yuto Sugihara</p>
+    <p class="affiliation">Security Engineer at F-TECH INC.</p>
+    <div class="slide-number">1</div>
+</div>
+
+<!-- Slide 2: The Problem -->
+<div class="slide">
+    <h2>The Challenge: AI Adoption Outpaces Security</h2>
+    <div class="two-column">
+        <div>
+            <h3>Current Reality</h3>
+            <ul>
+                <li>AI usage in workplace expanding <span class="highlight">faster than controls</span></li>
+                <li>Employees using AI to write code, access data, investigate systems</li>
+                <li><span class="highlight">"Shadow AI"</span> tools operating outside company control</li>
+                <li>Anyone can now code, regardless of technical background</li>
+            </ul>
+        </div>
+        <div>
+            <h3>The Governance Dilemma</h3>
+            <ul>
+                <li><span class="highlight">Banning AI</span> = Lost productivity benefits</li>
+                <li><span class="highlight">Ungoverned AI</span> = Data leakage, toxic content, exploitation</li>
+                <li>EDR systems flag AI behavior as suspicious</li>
+                <li>Non-technical users may misuse AI capabilities</li>
+            </ul>
+        </div>
+    </div>
+    <div class="quote">"No single control is sufficient - good governance requires defense in depth."</div>
+    <div class="slide-number">2</div>
+</div>
+
+<!-- Slide 3: Solution Overview -->
+<div class="slide">
+    <h2>The Solution: Three-Layer Defense-in-Depth</h2>
+    <div class="three-column">
+        <div class="layer-card layer1">
+            <div class="layer-num">1</div>
+            <h3>Organizational Policy</h3>
+            <p>Defines what is and isn't allowed based on NIST AI RMF and OECD guidelines</p>
+        </div>
+        <div class="layer-card layer2">
+            <div class="layer-num">2</div>
+            <h3>Identity-Based Authorization</h3>
+            <p>Controls WHO can access AI services using Microsoft Entra ID</p>
+        </div>
+        <div class="layer-card layer3">
+            <div class="layer-num">3</div>
+            <h3>Prompt-Level Defense</h3>
+            <p>Filters WHAT users can do with Amazon Bedrock Guardrails & Flows</p>
+        </div>
+    </div>
+    <div class="diagram">
+        <div class="flow-diagram">
+            <div class="flow-box">Policy (Rules)</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Identity (Who)</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Prompt (What)</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Safe AI Usage</div>
+        </div>
+    </div>
+    <div class="slide-number">3</div>
+</div>
+
+<!-- Slide 4: Layer 1 - Policy Frameworks -->
+<div class="slide">
+    <h2>Layer 1: Organizational AI Policy</h2>
+    <div class="framework-box">
+        <div class="framework nist">
+            <h3>NIST AI Risk Management Framework</h3>
+            <ul>
+                <li><span class="highlight">GOVERN</span> - Establish AI governance</li>
+                <li><span class="highlight">MAP</span> - Understand system capabilities</li>
+                <li><span class="highlight">MEASURE</span> - Assess performance</li>
+                <li><span class="highlight">MANAGE</span> - Address identified risks</li>
+            </ul>
+        </div>
+        <div class="framework oecd">
+            <h3>OECD AI Principles</h3>
+            <ul>
+                <li>Inclusive growth & well-being</li>
+                <li>Human rights & democratic values</li>
+                <li>Transparency & explainability</li>
+                <li>Robustness, safety & security</li>
+                <li>Accountability</li>
+            </ul>
+        </div>
+    </div>
+    <div class="slide-number">4</div>
+</div>
+
+<!-- Slide 5: Layer 1 - Cultural & Implementation -->
+<div class="slide">
+    <h2>Layer 1: Cultural & Implementation Considerations</h2>
+    <div class="two-column">
+        <div class="card">
+            <h3>Cultural/Regional Factors</h3>
+            <ul>
+                <li><span class="highlight">195 countries</span> with distinct laws and cultures</li>
+                <li>US: Individualist approach - personal responsibility</li>
+                <li>Japan: Collectivist - consensus-based decisions</li>
+                <li><span class="highlight">GDPR</span> and data protection laws vary by region</li>
+                <li>Policy permitted at HQ may be prohibited abroad</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Implementation Strategy</h3>
+            <ul>
+                <li>Select <span class="highlight">single approved AI provider</span></li>
+                <li>Block unauthorized AI via proxy/firewall policies</li>
+                <li>Use <span class="highlight">Amazon Bedrock</span> for data isolation</li>
+                <li>Corporate data never trains external models</li>
+                <li>Strong encryption & fine-grained access controls</li>
+            </ul>
+        </div>
+    </div>
+    <div class="slide-number">5</div>
+</div>
+
+<!-- Slide 6: Layer 2 - Identity Authorization -->
+<div class="slide">
+    <h2>Layer 2: Identity-Based Authorization</h2>
+    <h3 style="color: #7209b7; margin-bottom: 30px;">Microsoft Entra ID - Zero Trust Access Control</h3>
+    <div class="two-column">
+        <div class="card">
+            <h3>1. Adaptive Risk Assessment</h3>
+            <ul>
+                <li>ML-based authentication signal analysis</li>
+                <li>Detect anomalous sign-ins</li>
+                <li>Assign risk levels automatically</li>
+                <li>Works for humans AND AI agents</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>2. Strong Authentication</h3>
+            <ul>
+                <li>Phishing-resistant credentials</li>
+                <li>Windows Hello for Business</li>
+                <li>FIDO2 security keys</li>
+                <li>AI agents as principals with access criteria</li>
+            </ul>
+        </div>
+    </div>
+    <div class="two-column" style="margin-top: 30px;">
+        <div class="card">
+            <h3>3. Automated Remediation</h3>
+            <ul>
+                <li>Auto-trigger MFA challenges</li>
+                <li>Self-service password reset (SSPR)</li>
+                <li>Risk reduction without human intervention</li>
+                <li>Block sign-in for high-risk scenarios</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>4. ITDR (Threat Detection)</h3>
+            <ul>
+                <li>Security Copilot integration</li>
+                <li>Natural-language threat queries</li>
+                <li>Categorized risk reports</li>
+                <li>Distinguish real threats vs. false positives</li>
+            </ul>
+        </div>
+    </div>
+    <div class="slide-number">6</div>
+</div>
+
+<!-- Slide 7: Layer 2 - Identity Flow Diagram -->
+<div class="slide">
+    <h2>Layer 2: Identity Authorization Flow</h2>
+    <div class="diagram" style="padding: 50px;">
+        <div class="flow-diagram" style="flex-direction: column; gap: 30px;">
+            <div style="display: flex; align-items: center; gap: 30px;">
+                <div class="flow-box" style="background: #4361ee;">Requester<br>(Human/AI Agent)</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box" style="background: linear-gradient(135deg, #4361ee, #7209b7);">1. Risk Assessment<br>ML scores sign-in/user risk</div>
+                <span class="flow-arrow">→</span>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="flow-box" style="background: #dc3545; padding: 15px 25px;">High Risk → BLOCK</div>
+                    <div class="flow-box" style="background: #ffc107; color: #000; padding: 15px 25px;">Medium → MFA Required</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 30px;">
+                <div class="flow-box" style="background: linear-gradient(135deg, #7209b7, #f72585);">2. Strong Authentication<br>Phishing-resistant MFA</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box" style="background: linear-gradient(135deg, #7209b7, #f72585);">3. Auto Remediation<br>SSPR / Password Reset</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box" style="background: #28a745;">ALLOW<br>Access to AI Resource</div>
+            </div>
+        </div>
+    </div>
+    <p style="text-align: center; font-size: 22px; color: #a0a0a0; margin-top: 30px;">
+        <span class="highlight">Key Principle:</span> Access follows the user/agent, not the device or location
+    </p>
+    <div class="slide-number">7</div>
+</div>
+
+<!-- Slide 8: Layer 3 - Prompt Defenses -->
+<div class="slide">
+    <h2>Layer 3: Prompt-Level Defenses</h2>
+    <h3 style="color: #f72585; margin-bottom: 30px;">Amazon Bedrock Guardrails</h3>
+    <div class="three-column">
+        <div class="card">
+            <h3>Content Filters</h3>
+            <ul>
+                <li>Hate speech</li>
+                <li>Insults</li>
+                <li>Sexual content</li>
+                <li>Violence</li>
+                <li>Misconduct</li>
+                <li>Prompt attacks</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Topic & Word Filters</h3>
+            <ul>
+                <li>Denied topics (e.g., illegal advice)</li>
+                <li>Custom word blocks</li>
+                <li>Profanity filtering</li>
+                <li>Competitor name blocking</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Data Protection</h3>
+            <ul>
+                <li>PII detection & masking</li>
+                <li>SSN, DOB, addresses</li>
+                <li>Regex pattern matching</li>
+                <li>Contextual grounding checks</li>
+                <li>Hallucination detection</li>
+            </ul>
+        </div>
+    </div>
+    <div class="quote" style="margin-top: 40px;">
+        Enforcement operates in BOTH directions - checking inputs AND outputs
+    </div>
+    <div class="slide-number">8</div>
+</div>
+
+<!-- Slide 9: Layer 3 - Guardrails Flow -->
+<div class="slide">
+    <h2>Layer 3: Guardrails Processing Flow</h2>
+    <div class="diagram" style="padding: 40px;">
+        <div class="flow-diagram" style="flex-direction: column; gap: 25px;">
+            <div style="display: flex; align-items: center; gap: 20px; justify-content: center;">
+                <div class="flow-box" style="background: #4361ee;">User / App<br>sends prompt</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box" style="background: linear-gradient(135deg, #f72585, #7209b7);">INPUT CHECK<br>Content | Topics | Words | PII</div>
+                <span class="flow-arrow">→</span>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="flow-box" style="background: #dc3545; padding: 12px 20px;">Violation? → BLOCKED</div>
+                    <div class="flow-box" style="background: #28a745; padding: 12px 20px;">Pass → To Model</div>
+                </div>
+            </div>
+            <div style="font-size: 30px; color: #7209b7;">↓ Model generates response ↓</div>
+            <div style="display: flex; align-items: center; gap: 20px; justify-content: center;">
+                <div class="flow-box" style="background: #7209b7;">Foundation<br>Model</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box" style="background: linear-gradient(135deg, #f72585, #7209b7);">OUTPUT CHECK<br>Same policies + Grounding</div>
+                <span class="flow-arrow">→</span>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="flow-box" style="background: #dc3545; padding: 12px 20px;">Violation? → BLOCKED/MASKED</div>
+                    <div class="flow-box" style="background: #28a745; padding: 12px 20px;">Pass → Return to User</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">9</div>
+</div>
+
+<!-- Slide 10: Layer 3 - Bedrock Flows -->
+<div class="slide">
+    <h2>Layer 3: Amazon Bedrock Flows</h2>
+    <h3 style="color: #f72585;">Multi-Step Workflow Security</h3>
+    <div class="two-column">
+        <div>
+            <ul style="margin-top: 30px;">
+                <li>Many AI apps are <span class="highlight">multi-step processes</span>, not single exchanges</li>
+                <li>Flows allow <span class="highlight">constraints at each stage</span> of a workflow</li>
+                <li>Guardrails can be added to <span class="highlight">individual nodes</span></li>
+                <li>Condition nodes direct data based on <span class="highlight">intermediate results</span></li>
+                <li>Consistent policy enforcement across <span class="highlight">entire AI programs</span></li>
+            </ul>
+        </div>
+        <div class="diagram">
+            <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+                <div class="flow-box" style="width: 200px;">Prompt Node<br>+ Guardrails</div>
+                <span class="flow-arrow">↓</span>
+                <div class="flow-box" style="width: 200px; background: #f72585;">Condition Node<br>(Allow/Redirect/Halt)</div>
+                <span class="flow-arrow">↓</span>
+                <div class="flow-box" style="width: 200px;">Knowledge Base<br>+ Guardrails</div>
+                <span class="flow-arrow">↓</span>
+                <div class="flow-box" style="width: 200px; background: #28a745;">Safe Output</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">10</div>
+</div>
+
+<!-- Slide 11: How Layers Work Together -->
+<div class="slide">
+    <h2>Defense-in-Depth: How Layers Complement</h2>
+    <div class="diagram" style="padding: 50px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 22px;">
+            <tr style="background: rgba(67, 97, 238, 0.3);">
+                <th style="padding: 20px; text-align: left; border: 1px solid #4361ee;">Layer</th>
+                <th style="padding: 20px; text-align: left; border: 1px solid #4361ee;">Controls</th>
+                <th style="padding: 20px; text-align: left; border: 1px solid #4361ee;">Technology</th>
+                <th style="padding: 20px; text-align: left; border: 1px solid #4361ee;">Question Answered</th>
+            </tr>
+            <tr>
+                <td style="padding: 20px; border: 1px solid #4361ee; color: #4361ee; font-weight: bold;">1. Policy</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;">Rules & Guidelines</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;">NIST RMF, OECD</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;"><span class="highlight">What is allowed?</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 20px; border: 1px solid #4361ee; color: #7209b7; font-weight: bold;">2. Identity</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;">Access Control</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;">Microsoft Entra ID</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;"><span class="highlight">Who can access?</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 20px; border: 1px solid #4361ee; color: #f72585; font-weight: bold;">3. Prompt</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;">Content Filtering</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;">Amazon Bedrock</td>
+                <td style="padding: 20px; border: 1px solid #4361ee;"><span class="highlight">What can they do?</span></td>
+            </tr>
+        </table>
+    </div>
+    <p style="text-align: center; font-size: 24px; margin-top: 30px;">
+        Together: <span class="highlight">Declared policy → Enforceable technical controls</span>
+    </p>
+    <div class="slide-number">11</div>
+</div>
+
+<!-- Slide 12: Limitations -->
+<div class="slide">
+    <h2>Limitations & Considerations</h2>
+    <div class="two-column">
+        <div class="card">
+            <h3>Shadow AI Persistence</h3>
+            <ul>
+                <li>Personal devices bypass corporate controls</li>
+                <li>Mobile networks, home connections</li>
+                <li>VPN/tethering workarounds</li>
+                <li><span class="highlight">Raises effort</span> to evade, doesn't eliminate</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Prompt Control Scope</h3>
+            <ul>
+                <li>Only protects AI services through Bedrock</li>
+                <li>Cannot check external consumer AI products</li>
+                <li>Effectiveness depends on configuration</li>
+                <li>Content filtering is <span class="highlight">probabilistic</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="two-column" style="margin-top: 30px;">
+        <div class="card">
+            <h3>Trade-offs</h3>
+            <ul>
+                <li>Overly strict = blocks legitimate activity</li>
+                <li>Security vs. usability balance</li>
+                <li>Each organization must calibrate</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Platform Specificity</h3>
+            <ul>
+                <li>Examples use Microsoft & AWS</li>
+                <li>Concepts adaptable to other platforms</li>
+                <li>AI security features evolving rapidly</li>
+            </ul>
+        </div>
+    </div>
+    <div class="slide-number">12</div>
+</div>
+
+<!-- Slide 13: Conclusions -->
+<div class="slide">
+    <h2>Conclusions</h2>
+    <div class="conclusion-box">
+        <ul>
+            <li><span class="highlight">No single control</span> can bridge the AI governance gap</li>
+            <li>Three-layer defense-in-depth provides <span class="highlight">comprehensive coverage</span></li>
+            <li><span class="highlight">Layer 1 (Policy)</span>: Establishes rules based on NIST/OECD frameworks</li>
+            <li><span class="highlight">Layer 2 (Identity)</span>: Controls access at user/agent level with Zero Trust</li>
+            <li><span class="highlight">Layer 3 (Prompt)</span>: Filters dangerous inputs/outputs at platform level</li>
+            <li>Enables <span class="highlight">safe AI adoption</span> without productivity-killing bans</li>
+        </ul>
+    </div>
+    <div class="quote" style="margin-top: 40px;">
+        "Policy establishes the rules, identity determines who may act,<br>and prompt-level defense restricts what a user may do."
+    </div>
+    <div class="slide-number">13</div>
+</div>
+
+<!-- Slide 14: Key Takeaways -->
+<div class="slide">
+    <h2>Key Takeaways for Security Teams</h2>
+    <div class="three-column">
+        <div class="stat-box">
+            <div class="stat-number">1</div>
+            <div class="stat-label">Start with Policy<br>Build on NIST/OECD</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Control Identity<br>Zero Trust for AI access</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Filter at Platform<br>Guardrails on all prompts</div>
+        </div>
+    </div>
+    <div class="diagram" style="margin-top: 50px;">
+        <p style="font-size: 28px; margin-bottom: 20px;">Implementation Priority</p>
+        <div class="flow-diagram">
+            <div class="flow-box">Assess current AI usage</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Define acceptable use policy</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Implement identity controls</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Deploy prompt guardrails</div>
+        </div>
+    </div>
+    <div class="slide-number">14</div>
+</div>
+
+<!-- Slide 15: Thank You -->
+<div class="slide title-slide">
+    <h1>Thank You</h1>
+    <div class="contact-info" style="margin-top: 40px;">
+        <p style="font-size: 28px; color: #ffffff; margin-bottom: 30px;">Yuto Sugihara</p>
+        <p>Security Engineer at F-TECH INC.</p>
+    </div>
+    <div class="slide-number">15</div>
+</div>
+
+</body>
+</html>
