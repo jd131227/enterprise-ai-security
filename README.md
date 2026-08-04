@@ -45,14 +45,17 @@ The increasing use of artificial intelligence in the workplace has surpassed the
 ## Citation
 
 ```bibtex
-@misc{sugihara2026,
-  author    = {Sugihara, Yuto},
-  title     = {Governing Enterprise AI: A Three-Layer 
-               Defense-in-Depth Model},
-  year      = {2026},
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.21365521},
-  url       = {https://doi.org/10.5281/zenodo.21365521}
+@dataset{sugihara_2026_21365521,
+  author       = {Sugihara, Yuto},
+  title        = {Governing Enterprise AI: A Three-Layer
+                   Defense-in-Depth Model
+                  },
+  month        = jul,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {v4},
+  doi          = {10.5281/zenodo.21365521},
+  url          = {https://doi.org/10.5281/zenodo.21365521}
 }
 ```
 
